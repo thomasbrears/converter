@@ -639,3 +639,336 @@ function copyToClipboard(elementId) {
     document.execCommand("copy");
     alert("Copied: " + copyText.value); // Alert or indicate copy success
 }
+
+// Duty Time Calculator Functions
+
+function updateStanddownValue() {
+    const slider = document.getElementById('standdownSlider');
+    const valueDisplay = document.getElementById('standdownValue');
+    if (slider && valueDisplay) {
+        valueDisplay.textContent = slider.value + 'h';
+        calculateDutyTime();
+    }
+}
+
+function parseDutyTime(timeStr) {
+    if (!timeStr) return null;
+    
+    timeStr = timeStr.trim();
+    let hours, minutes;
+
+    if (timeStr.toLowerCase().includes('am') || timeStr.toLowerCase().includes('pm')) {
+        const isPM = timeStr.toLowerCase().includes('pm');
+        const cleanTime = timeStr.replace(/am|pm/gi, '').trim();
+        
+        if (cleanTime.includes(':')) {
+            const parts = cleanTime.split(':');
+            hours = parseInt(parts[0]);
+            minutes = parts[1] ? parseInt(parts[1]) : 0;
+        } else {
+            const numStr = cleanTime.padStart(3, '0');
+            if (numStr.length === 3) {
+                hours = parseInt(numStr.substring(0, 1));
+                minutes = parseInt(numStr.substring(1));
+            } else {
+                hours = parseInt(numStr.substring(0, 2));
+                minutes = parseInt(numStr.substring(2));
+            }
+        }
+
+        if (isPM && hours !== 12) hours += 12;
+        if (!isPM && hours === 12) hours = 0;
+    } else {
+        if (timeStr.includes(':')) {
+            const parts = timeStr.split(':');
+            hours = parseInt(parts[0]);
+            minutes = parts[1] ? parseInt(parts[1]) : 0;
+        } else {
+            const numStr = timeStr.padStart(4, '0');
+            hours = parseInt(numStr.substring(0, 2));
+            minutes = parseInt(numStr.substring(2, 4));
+        }
+    }
+
+    if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        return null;
+    }
+
+    return { hours, minutes };
+}
+
+function formatDutyTime(hours, minutes, is24Hour) {
+    if (is24Hour) {
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    } else {
+        const period = hours >= 12 ? 'PM' : 'AM';
+        let displayHours = hours % 12;
+        if (displayHours === 0) displayHours = 12;
+        return `${displayHours}:${String(minutes).padStart(2, '0')} ${period}`;
+    }
+}
+
+function formatDutyTimeBoth(hours, minutes) {
+    const time24 = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    const period = hours >= 12 ? 'PM' : 'AM';
+    let displayHours = hours % 12;
+    if (displayHours === 0) displayHours = 12;
+    const time12 = `${displayHours}:${String(minutes).padStart(2, '0')} ${period}`;
+    
+    return { time24, time12 };
+}
+
+function addDutyHours(time, hoursToAdd) {
+    let totalMinutes = time.hours * 60 + time.minutes + hoursToAdd * 60;
+    const days = Math.floor(totalMinutes / (24 * 60));
+    totalMinutes = totalMinutes % (24 * 60);
+    
+    return {
+        hours: Math.floor(totalMinutes / 60),
+        minutes: totalMinutes % 60,
+        days: days
+    };
+}
+
+function getDutyDayText(days) {
+    if (days === 0) return 'today';
+    if (days === 1) return 'tomorrow';
+    return `in ${days} days`;
+}
+
+function calculateDutyTime() {
+    const standdownSlider = document.getElementById('standdownSlider');
+    const timeFormatSelect = document.getElementById('timeFormat');
+    const startTimeInput = document.getElementById('dutyStartTime');
+    const endTimeInput = document.getElementById('dutyEndTime');
+    const resultDiv = document.getElementById('dutyResult');
+    const startTimeError = document.getElementById('duty-start-error');
+    const endTimeError = document.getElementById('duty-end-error');
+
+    if (!standdownSlider || !startTimeInput || !endTimeInput || !resultDiv) return;
+
+    const standdownHours = parseFloat(standdownSlider.value);
+    const is24Hour = timeFormatSelect ? timeFormatSelect.value === '24' : true;
+    const startTime = parseDutyTime(startTimeInput.value);
+    const endTime = parseDutyTime(endTimeInput.value);
+
+    // Clear previous errors
+    if (startTimeInput) startTimeInput.classList.remove('error');
+    if (endTimeInput) endTimeInput.classList.remove('error');
+    if (startTimeError) {
+        startTimeError.textContent = '';
+        startTimeError.classList.remove('show');
+    }
+    if (endTimeError) {
+        endTimeError.textContent = '';
+        endTimeError.classList.remove('show');
+    }
+
+    // Validate start time if entered
+    if (startTimeInput.value && !startTime) {
+        startTimeInput.classList.add('error');
+        if (startTimeError) {
+            startTimeError.textContent = 'Invalid time format';
+            startTimeError.style.display = 'block';
+        }
+        resultDiv.style.display = 'none';
+        return;
+    }
+
+    // Validate end time if entered
+    if (endTimeInput.value && !endTime) {
+        endTimeInput.classList.add('error');
+        if (endTimeError) {
+            endTimeError.textContent = 'Invalid time format';
+            endTimeError.style.display = 'block';
+        }
+        resultDiv.style.display = 'none';
+        return;
+    }
+
+    if (startTime && !endTimeInput.value) {
+        const calculatedEnd = addDutyHours(startTime, standdownHours);
+        const endTimeStr = formatDutyTime(calculatedEnd.hours, calculatedEnd.minutes, is24Hour);
+        const bothFormats = formatDutyTimeBoth(calculatedEnd.hours, calculatedEnd.minutes);
+        endTimeInput.value = endTimeStr;
+        
+        const dayText = calculatedEnd.days > 0 ? ` <span class="duty-day-indicator">(${getDutyDayText(calculatedEnd.days)})</span>` : '';
+        resultDiv.innerHTML = `
+            <div class="duty-result-time">End time: ${bothFormats.time24} (${bothFormats.time12}) ${dayText}</div>
+        `;
+        resultDiv.style.display = 'block';
+    } else if (endTime && !startTimeInput.value) {
+        const calculatedStart = addDutyHours(endTime, standdownHours);
+        const bothFormats = formatDutyTimeBoth(calculatedStart.hours, calculatedStart.minutes);
+        
+        const dayText = calculatedStart.days > 0 ? ` <span class="duty-day-indicator">(${getDutyDayText(calculatedStart.days)})</span>` : '';
+        resultDiv.innerHTML = `
+            <div class="duty-result-time">Next start time: ${bothFormats.time24} (${bothFormats.time12}) ${dayText}</div>
+        `;
+        resultDiv.style.display = 'block';
+    } else {
+        resultDiv.style.display = 'none';
+    }
+}
+
+function onDutyStartInput() {
+    const endTimeInput = document.getElementById('dutyEndTime');
+    if (endTimeInput) endTimeInput.value = '';
+    calculateDutyTime();
+}
+
+function onDutyEndInput() {
+    const startTimeInput = document.getElementById('dutyStartTime');
+    if (startTimeInput) startTimeInput.value = '';
+    calculateDutyTime();
+}
+
+
+
+// Partial Leave Calculator Functions
+function parseLeaveTime(timeStr) {
+    timeStr = timeStr.trim().toLowerCase();
+    
+    const isPM = timeStr.includes('pm');
+    const isAM = timeStr.includes('am');
+    
+    timeStr = timeStr.replace(/am|pm/g, '').trim();
+    timeStr = timeStr.replace(/:/g, '').replace(/\s/g, '');
+    
+    let hours, minutes;
+    
+    if (timeStr.length === 3 || timeStr.length === 4) {
+        if (timeStr.length === 3) {
+            hours = parseInt(timeStr.substring(0, 1));
+            minutes = parseInt(timeStr.substring(1, 3));
+        } else {
+            hours = parseInt(timeStr.substring(0, 2));
+            minutes = parseInt(timeStr.substring(2, 4));
+        }
+    } else if (timeStr.length === 1 || timeStr.length === 2) {
+        hours = parseInt(timeStr);
+        minutes = 0;
+    } else {
+        return null;
+    }
+    
+    if (isNaN(hours) || isNaN(minutes)) {
+        return null;
+    }
+    
+    if (isPM && hours !== 12) {
+        hours += 12;
+    } else if (isAM && hours === 12) {
+        hours = 0;
+    }
+    
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+        return null;
+    }
+    
+    return hours * 60 + minutes;
+}
+
+function formatLeaveMinutes(totalMinutes) {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    
+    if (minutes === 0) {
+        return `${hours} hour${hours !== 1 ? 's' : ''}`;
+    }
+    
+    return `${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+}
+
+function calculateLeave() {
+    const startTimeStr = document.getElementById('leaveStartTime').value;
+    const endTimeStr = document.getElementById('leaveEndTime').value;
+    const leftTimeStr = document.getElementById('leaveLeftTime').value;
+    
+    const errorEl = document.getElementById('leave-error');
+    const resultsEl = document.getElementById('leaveResults');
+    
+    if (!startTimeStr || !endTimeStr || !leftTimeStr) {
+        errorEl.style.display = 'none';
+        resultsEl.style.display = 'none';
+        return;
+    }
+    
+    const startMinutes = parseLeaveTime(startTimeStr);
+    const endMinutes = parseLeaveTime(endTimeStr);
+    const leftMinutes = parseLeaveTime(leftTimeStr);
+    
+    if (startMinutes === null) {
+        errorEl.textContent = 'Invalid start time format';
+        errorEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        return;
+    }
+    
+    if (endMinutes === null) {
+        errorEl.textContent = 'Invalid end time format';
+        errorEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        return;
+    }
+    
+    if (leftMinutes === null) {
+        errorEl.textContent = 'Invalid left at time format';
+        errorEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        return;
+    }
+    
+    if (endMinutes <= startMinutes) {
+        errorEl.textContent = 'End time must be after start time';
+        errorEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        return;
+    }
+    
+    if (leftMinutes < startMinutes) {
+        errorEl.textContent = 'Left at time cannot be before start time';
+        errorEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        return;
+    }
+    
+    if (leftMinutes > endMinutes) {
+        errorEl.textContent = 'Left at time cannot be after scheduled end time';
+        errorEl.style.display = 'block';
+        resultsEl.style.display = 'none';
+        return;
+    }
+    
+    errorEl.style.display = 'none';
+    
+    const scheduledMinutes = endMinutes - startMinutes;
+    const workedMinutes = leftMinutes - startMinutes;
+    const notWorkedMinutes = endMinutes - leftMinutes;
+    
+    document.getElementById('scheduledTime').textContent = formatLeaveMinutes(scheduledMinutes);
+    document.getElementById('workedTime').textContent = formatLeaveMinutes(workedMinutes);
+    document.getElementById('notWorkedTime').textContent = formatLeaveMinutes(notWorkedMinutes);
+    
+    resultsEl.style.display = 'block';
+}
+
+function onLeaveInput() {
+    calculateLeave();
+}
+
+// Copy to clipboard function (if not already in your script.js)
+function copyToClipboard(elementId) {
+    const element = document.getElementById(elementId);
+    element.select();
+    element.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    
+    // Optional: Show a brief "Copied!" message
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => {
+        btn.textContent = originalText;
+    }, 1500);
+}

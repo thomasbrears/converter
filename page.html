@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			Multi-purpose Converter
+		</title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); min-height: 100vh; position: relative; overflow-x: hidden;">
+		<!-- Floating shapes background -->
+		<div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden;">
+			<div class="float-shape" style="position: absolute; width: 80px; height: 80px; background: rgba(255,255,255,0.1); border-radius: 50%; top: 10%; left: 10%; animation: float 6s ease-in-out infinite;"></div>
+			<div class="float-shape" style="position: absolute; width: 60px; height: 60px; background: rgba(255,255,255,0.08); border-radius: 50%; top: 70%; left: 80%; animation: float 8s ease-in-out infinite 1s;"></div>
+			<div class="float-shape" style="position: absolute; width: 100px; height: 100px; background: rgba(255,255,255,0.06); border-radius: 50%; top: 40%; left: 85%; animation: float 7s ease-in-out infinite 2s;"></div>
+			<div class="float-shape" style="position: absolute; width: 70px; height: 70px; background: rgba(255,255,255,0.09); border-radius: 50%; top: 80%; left: 15%; animation: float 9s ease-in-out infinite 3s;"></div>
+		</div>
+		<!-- Scroll to Top Button -->
+		<button id="scroll-to-top" aria-label="Scroll to top" style="display: none;">
+			↑ Top
+		</button>
+		
+		<!-- Page Title and Description -->
+		<header class="page-header">
+			<h1 class="page-title">
+				
+			</h1>
+			<p class="page-description">
+				
+			</p>
+		</header>
+		
+		<div class="converters-wrapper">
+			<!-- Duty Time Calculator Section -->
+            <div class="converter-container" id="duty-time">
+                <h2>Duty Time Calculator</h2>
+                
+                <div class="input-group" style="display: flex; flex-direction: column;">
+                    <label for="standdownSlider" style="display: block; margin-bottom: 10px; order: 1;">Min Standdown Time: <span id="standdownValue" class="standdown-value">10h</span></label>
+                    <input type="range" id="standdownSlider" class="standdown-slider" min="1" max="24" value="10" step="0.5" oninput="updateStanddownValue()" style="order: 2; margin-top: 0;">
+                </div>
+
+                <div class="input-group">
+                    <label for="dutyStartTime">Start Time:</label>
+                    <input type="text" id="dutyStartTime" placeholder="e.g., 1300, 1:00pm, 13:00" oninput="onDutyStartInput()">
+                    <button onclick="copyToClipboard('dutyStartTime')" class="copy-btn">Copy</button>
+                    <small class="error-message" id="duty-start-error"></small>
+                </div>
+
+                <div class="input-group">
+                    <label for="dutyEndTime">End Time:</label>
+                    <input type="text" id="dutyEndTime" placeholder="e.g., 2300, 11:00pm, 23:00" oninput="onDutyEndInput()">
+                    <button onclick="copyToClipboard('dutyEndTime')" class="copy-btn">Copy</button>
+                    <small class="error-message" id="duty-end-error"></small>
+                </div>
+
+                <div id="dutyResult" class="duty-result" style="display: none;"></div>
+            </div>
+
+            <!-- Partial Leave Calculator -->
+            <div class="converter-container" id="partial-leave">
+                <h2>Partial Leave Calculator</h2>
+                
+                <div class="input-group">
+                    <label for="leaveStartTime">Start Time:</label>
+                    <input type="text" id="leaveStartTime" placeholder="e.g., 1000, 10am, 10:00" oninput="onLeaveInput()">
+                    <button onclick="copyToClipboard('leaveStartTime')" class="copy-btn">Copy</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="leaveEndTime">Rostered End:</label>
+                    <input type="text" id="leaveEndTime" placeholder="e.g., 1800, 6pm, 18:00" oninput="onLeaveInput()">
+                    <button onclick="copyToClipboard('leaveEndTime')" class="copy-btn">Copy</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="leaveLeftTime">Left At:</label>
+                    <input type="text" id="leaveLeftTime" placeholder="e.g., 1500, 3pm, 15:00" oninput="onLeaveInput()">
+                    <button onclick="copyToClipboard('leaveLeftTime')" class="copy-btn">Copy</button>
+                </div>
+
+                <div class="error-message" id="leave-error" style="display: none;"></div>
+
+                <div id="leaveResults" class="result-container" style="display: none;">
+                    <div class="result-item">
+                        <div class="result-label">Total Scheduled Time</div>
+                        <div class="result-value" id="scheduledTime">-</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Time Actually Worked</div>
+                        <div class="result-value" id="workedTime">-</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Time Not Worked</div>
+                        <div class="result-value" id="notWorkedTime">-</div>
+                    </div>
+                </div>
+            </div>
+
+		</div>
+
+        <footer>
+            <p> Hope you have a good day cutie! You can do anything you set your mind to!        I Love you more (I win)
+		
+		<script src="script.js">
+		</script>
+	</body>
+
+</html>
