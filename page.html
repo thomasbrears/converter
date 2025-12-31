@@ -101,6 +101,203 @@
 
 		</div>
 
+       <!-- Email Templates Section -->
+            <div class="converter-container email-templates-container" id="email-templates" style="max-width: 100%; flex-basis: 100%;">
+                <h2>Email Templates</h2>
+                
+                <div class="email-settings">
+                    <div class="input-group">
+                        <label for="nameInput">Name:</label>
+                        <input type="text" id="nameInput" placeholder="Enter name here..." value="Lauren" style="width: 100%;">
+                    </div>
+                    <div class="input-group">
+                        <label for="signatureSelect">Sign-off:</label>
+                        <select id="signatureSelect" onchange="updateAllSignatures()" style="width: 100%;">
+                            <option value="Ngā mihi">Ngā mihi</option>
+                            <option value="Cheers">Cheers</option>
+                            <option value="Thanks">Thanks</option>
+                            <option value="Kind regards">Kind regards</option>
+                            <option value="Warm regards">Warm regards</option>
+                            <option value="Kia pai tō rā (Have a good day)">Kia pai tō rā (Have a good day)</option>
+                            <option value="Kia pai tō rā whakatā (Have a good weekend)">Kia pai tō rā whakatā (Have a good weekend)</option>
+
+                        </select>
+                    </div>
+                    <button onclick="updateAllEmailTemplates()" class="copy-btn" style="width: 100%; margin-top: 10px; padding: 12px; background: #667eea; color: white; font-weight: 600;">
+                        Update All Templates
+                    </button>
+                </div>
+
+                <div class="email-templates-grid">
+                    <!-- Template 1 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Request Actioned</div>
+                        <div class="email-template-preview" id="emailTemplate1">Kia ora <span class="email-highlight">Lauren</span>
+
+All sorted! I've actioned your request as per below.
+
+Let me know if you need anything else.
+
+<span class="email-signature" id="emailSignature1">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate1', this)">Copy Email</button>
+                    </div>
+                    
+                    <!-- Template 2 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Further Information Required</div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="infoNeeded2">What information do you need?</label>
+                            <input id="infoNeeded2" type="text" placeholder="e.g., your account number, date of birth, etc." oninput="updateEmailTemplate2()" ></input>
+                        </div>
+                        <div class="email-template-preview" id="emailTemplate2">Kia ora <span class="email-highlight">Lauren</span>
+
+Thanks for reaching out! To help you with this, could you please provide <span class="email-placeholder" id="emailPlaceholder2">[the information needed]</span>?
+
+Once I have those details, I'll get this sorted for you right away.
+
+<span class="email-signature" id="emailSignature2">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate2', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 3 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Request Received</div>
+                        <div class="email-template-preview" id="emailTemplate3">Kia ora <span class="email-highlight">Lauren</span>
+
+Thanks for getting in touch! I've received your request and I'm on it.
+
+I'll keep you posted as I work through this.
+
+<span class="email-signature" id="emailSignature3">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate3', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 4 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Request Completed</div>
+                        <div class="email-template-preview" id="emailTemplate4">Kia ora <span class="email-highlight">Lauren</span>
+
+Great news - all done! Your request has been completed.
+
+If there's anything else you need, just let me know. Happy to help!
+
+<span class="email-signature" id="emailSignature4">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate4', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 5 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Delay/Waiting</div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="timeframe5">Timeframe:</label>
+                            <input type="text" id="timeframe5" placeholder="e.g., end of the day, tomorrow, Friday" oninput="updateEmailTemplate5()">
+                        </div>
+                        <div class="email-template-preview" id="emailTemplate5">Kia ora <span class="email-highlight">Lauren</span>
+
+I'm working on your request but it's taking a bit longer than expected. I should have this sorted for you by <span class="email-placeholder" id="emailPlaceholder5">[timeframe]</span>.
+
+Thanks for your patience!
+
+<span class="email-signature" id="emailSignature5">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate5', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 6 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Escalation/Handover</div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="team6">Team/Specialist:</label>
+                            <input type="text" id="team6" placeholder="e.g., IT team, accounts specialist" oninput="updateEmailTemplate6()">
+                        </div>
+                        <div class="email-template-preview" id="emailTemplate6">Kia ora <span class="email-highlight">Lauren</span>
+
+Thanks for your request! I've passed this on to our <span class="email-placeholder" id="emailPlaceholder6">[team/specialist]</span> who'll be better placed to help you with this.
+
+They'll be in touch soon.
+
+<span class="email-signature" id="emailSignature6">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate6', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 7 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Follow-Up</div>
+                        <div class="email-template-preview" id="emailTemplate7">Kia ora <span class="email-highlight">Lauren</span>
+
+Just checking in to make sure everything's working well after I actioned your request.
+
+Let me know if you need anything else!
+
+<span class="email-signature" id="emailSignature7">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate7', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 8 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Clarification</div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="confirm8">What you think they want:</label>
+                            <input type="text" id="confirm8" placeholder="e.g., you want to update your email address" oninput="updateEmailTemplate8()" ></input>
+                        </div>
+                        <div class="email-template-preview" id="emailTemplate8">Kia ora <span class="email-highlight">Lauren</span>
+
+Just want to make sure I've got this right - <span class="email-placeholder" id="emailPlaceholder8">[confirm what you think they want]</span>.
+
+Can you confirm so I can get this sorted for you?
+
+<span class="email-signature" id="emailSignature8">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate8', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 9 -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Out of Scope</div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="alternative9">Alternative/Who can help:</label>
+                            <input type="text" id="alternative9" placeholder="e.g., the billing team at billing@company.com" oninput="updateEmailTemplate9()" ></input>
+                        </div>
+                        <div class="email-template-preview" id="emailTemplate9">Kia ora <span class="email-highlight">Lauren</span>
+
+Thanks for reaching out! This one sits outside what I can help with, but <span class="email-placeholder" id="emailPlaceholder9">[suggest alternative/who can help]</span> will be able to sort you out.
+
+Feel free to reach out to them directly!
+
+<span class="email-signature" id="emailSignature9">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate9', this)">Copy Email</button>
+                    </div>
+
+                    <!-- Template 10 - Staff Attendance Confirmation -->
+                    <div class="email-template-card">
+                        <div class="email-template-title">Staff Attendance Confirmation</div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="staffName10">Staff Name:</label>
+                            <input type="text" id="staffName10" placeholder="e.g., John Smith" oninput="updateEmailTemplate10()">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="staffId10">Staff ID:</label>
+                            <input type="text" id="staffId10" placeholder="e.g., 12345" oninput="updateEmailTemplate10()">
+                        </div>
+                        <div class="input-group" style="margin-bottom: 15px;">
+                            <label for="workDay10">Day:</label>
+                            <input type="text" id="workDay10" placeholder="e.g., Monday 15 January, yesterday" oninput="updateEmailTemplate10()">
+                        </div>
+                        <div class="email-template-preview" id="emailTemplate10">Kia ora <span class="email-highlight">Lauren</span>
+
+I am emailing to confirm if <span class="email-placeholder">[staff name (ID)]</span> worked on <span class="email-placeholder">[day]</span>.
+
+They were scheduled to work on this day as per the roster, however I cannot see any swipes for them, and no notes have been added to the exceptions sheet.
+
+Can you please confirm if they worked on this day?
+
+                    <span class="email-signature" id="emailSignature10">Ngā mihi</span></div>
+                        <button class="copy-btn email-copy-btn" onclick="copyEmailTemplate('emailTemplate10', this)">Copy Email</button>
+                    </div>
+
+                </div>
+            </div>
+
+		</div>
+
         <footer>
             <p> Hope you have a good day cutie! You can do anything you set your mind to!        I Love you more (I win)
 		

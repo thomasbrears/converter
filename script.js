@@ -972,3 +972,262 @@ function copyToClipboard(elementId) {
         btn.textContent = originalText;
     }, 1500);
 }
+
+// Email Templates Functions
+const emailTemplates = ['emailTemplate1', 'emailTemplate2', 'emailTemplate3', 'emailTemplate4', 'emailTemplate5', 'emailTemplate6', 'emailTemplate7', 'emailTemplate8', 'emailTemplate9', 'emailTemplate10'];
+const emailSignatures = ['Ngā mihi', 'Cheers', 'Thanks', 'Kind regards', 'Warm regards', 'Kia pai tō rā (Have a good day)', 'Kia pai tō rā whakatā (Have a good weekend)'];
+
+// Initialize email templates after DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Set random signature on page load
+    const signatureSelect = document.getElementById('signatureSelect');
+    if (signatureSelect) {
+        const randomSignature = emailSignatures[Math.floor(Math.random() * emailSignatures.length)];
+        signatureSelect.value = randomSignature;
+    }
+
+    // Set up name input with Enter key support
+    const nameInput = document.getElementById('nameInput');
+    if (nameInput) {
+        nameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                updateAllEmailTemplates();
+            }
+        });
+    }
+    
+    // Initialize templates with default values
+    updateAllSignatures();
+    updateAllEmailTemplates();
+});
+
+function updateAllEmailTemplates() {
+    const nameInput = document.getElementById('nameInput');
+    const signatureSelect = document.getElementById('signatureSelect');
+    
+    const name = nameInput?.value || 'Lauren';
+    const signature = signatureSelect?.value || 'Ngā mihi';
+    
+    // Update each template with the new name
+    const templates = {
+        'emailTemplate1': `Kia ora <span class="email-highlight">${name}</span>
+
+All sorted! I've actioned your request as per below.
+
+Let me know if you need anything else.
+
+<span class="email-signature" id="emailSignature1">${signature}</span>`,
+        
+        'emailTemplate3': `Kia ora <span class="email-highlight">${name}</span>
+
+Thanks for getting in touch! I've received your request and I'm on it.
+
+I'll keep you posted as I work through this.
+
+<span class="email-signature" id="emailSignature3">${signature}</span>`,
+        
+        'emailTemplate4': `Kia ora <span class="email-highlight">${name}</span>
+
+Great news - all done! Your request has been completed.
+
+If there's anything else you need, just let me know. Happy to help!
+
+<span class="email-signature" id="emailSignature4">${signature}</span>`,
+        
+        'emailTemplate7': `Kia ora <span class="email-highlight">${name}</span>
+
+Just checking in to make sure everything's working well after I actioned your request.
+
+Let me know if you need anything else!
+
+<span class="email-signature" id="emailSignature7">${signature}</span>`
+    };
+    
+    // Update templates that don't have custom inputs
+    Object.keys(templates).forEach(templateId => {
+        const element = document.getElementById(templateId);
+        if (element) {
+            element.innerHTML = templates[templateId];
+        }
+    });
+    
+    // Update templates with custom inputs
+    updateEmailTemplate2();
+    updateEmailTemplate5();
+    updateEmailTemplate6();
+    updateEmailTemplate8();
+    updateEmailTemplate9();
+    updateEmailTemplate10();
+}
+
+function updateAllSignatures() {
+    const signatureSelect = document.getElementById('signatureSelect');
+    
+    if (!signatureSelect) return;
+    
+    const signature = signatureSelect.value;
+    
+    // Update all signature elements
+    for (let i = 1; i <= 9; i++) {
+        const signatureElement = document.getElementById('emailSignature' + i);
+        if (signatureElement) {
+            signatureElement.textContent = signature;
+        }
+    }
+    
+    // Refresh all templates to ensure consistency
+    updateAllEmailTemplates();
+}
+
+function updateEmailTemplate2() {
+    const nameInput = document.getElementById('nameInput');
+    const infoNeeded = document.getElementById('infoNeeded2');
+    const signatureSelect = document.getElementById('signatureSelect');
+    const template = document.getElementById('emailTemplate2');
+    
+    if (!template) return;
+    
+    const name = nameInput?.value || 'Lauren';
+    const info = infoNeeded?.value || '[the information needed]';
+    const signature = signatureSelect?.value || 'Ngā mihi';
+    
+    template.innerHTML = `Kia ora <span class="email-highlight">${name}</span>
+
+Thanks for reaching out! To help you with this, could you please provide <span class="email-placeholder">${info}</span>?
+
+Once I have those details, I'll get this sorted for you right away.
+
+<span class="email-signature" id="emailSignature2">${signature}</span>`;
+}
+
+function updateEmailTemplate5() {
+    const nameInput = document.getElementById('nameInput');
+    const timeframe = document.getElementById('timeframe5');
+    const signatureSelect = document.getElementById('signatureSelect');
+    const template = document.getElementById('emailTemplate5');
+    
+    if (!template) return;
+    
+    const name = nameInput?.value || 'Lauren';
+    const time = timeframe?.value || '[timeframe]';
+    const signature = signatureSelect?.value || 'Ngā mihi';
+    
+    template.innerHTML = `Kia ora <span class="email-highlight">${name}</span>
+
+I'm working on your request but it's taking a bit longer than expected. I should have this sorted for you by <span class="email-placeholder">${time}</span>.
+
+Thanks for your patience!
+
+<span class="email-signature" id="emailSignature5">${signature}</span>`;
+}
+
+function updateEmailTemplate6() {
+    const nameInput = document.getElementById('nameInput');
+    const team = document.getElementById('team6');
+    const signatureSelect = document.getElementById('signatureSelect');
+    const template = document.getElementById('emailTemplate6');
+    
+    if (!template) return;
+    
+    const name = nameInput?.value || 'Lauren';
+    const teamName = team?.value || '[team/specialist]';
+    const signature = signatureSelect?.value || 'Ngā mihi';
+    
+    template.innerHTML = `Kia ora <span class="email-highlight">${name}</span>
+
+Thanks for your request! I've passed this on to our <span class="email-placeholder">${teamName}</span> who'll be better placed to help you with this.
+
+They'll be in touch soon.
+
+<span class="email-signature" id="emailSignature6">${signature}</span>`;
+}
+
+function updateEmailTemplate8() {
+    const nameInput = document.getElementById('nameInput');
+    const confirm = document.getElementById('confirm8');
+    const signatureSelect = document.getElementById('signatureSelect');
+    const template = document.getElementById('emailTemplate8');
+    
+    if (!template) return;
+    
+    const name = nameInput?.value || 'Lauren';
+    const confirmText = confirm?.value || '[confirm what you think they want]';
+    const signature = signatureSelect?.value || 'Ngā mihi';
+    
+    template.innerHTML = `Kia ora <span class="email-highlight">${name}</span>
+
+Just want to make sure I've got this right - <span class="email-placeholder">${confirmText}</span>.
+
+Can you confirm so I can get this sorted for you?
+
+<span class="email-signature" id="emailSignature8">${signature}</span>`;
+}
+
+function updateEmailTemplate9() {
+    const nameInput = document.getElementById('nameInput');
+    const alternative = document.getElementById('alternative9');
+    const signatureSelect = document.getElementById('signatureSelect');
+    const template = document.getElementById('emailTemplate9');
+    
+    if (!template) return;
+    
+    const name = nameInput?.value || 'Lauren';
+    const altText = alternative?.value || '[suggest alternative/who can help]';
+    const signature = signatureSelect?.value || 'Ngā mihi';
+    
+    template.innerHTML = `Kia ora <span class="email-highlight">${name}</span>
+
+Thanks for reaching out! This one sits outside what I can help with, but <span class="email-placeholder">${altText}</span> will be able to sort you out.
+
+Feel free to reach out to them directly!
+
+<span class="email-signature" id="emailSignature9">${signature}</span>`;
+}
+
+function updateEmailTemplate10() {
+    const nameInput = document.getElementById('nameInput');
+    const staffName = document.getElementById('staffName10');
+    const staffId = document.getElementById('staffId10');
+    const workDay = document.getElementById('workDay10');
+    const signatureSelect = document.getElementById('signatureSelect');
+    const template = document.getElementById('emailTemplate10');
+    
+    if (!template) return;
+    
+    const name = nameInput?.value || 'Lauren';
+    const staffNameValue = staffName?.value || '[staff name]';
+    const staffIdValue = staffId?.value || '[ID]';
+    const workDayValue = workDay?.value || '[day]';
+    const signature = signatureSelect?.value || 'Ngā mihi';
+
+    const staffInfo = staffNameValue + ' (' + staffIdValue + ')';
+
+    template.innerHTML = `Kia ora <span class="email-highlight">${name}</span>
+
+I am emailing to confirm if <span class="email-placeholder">${staffInfo}</span> worked on <span class="email-placeholder">${workDayValue}</span>.
+
+They were scheduled to work on this day as per the roster, however I cannot see any swipes for them, and no notes have been added to the exceptions sheet.
+
+Can you please confirm if they worked on this day?
+
+<span class="email-signature" id="emailSignature10">${signature}</span>`;
+}
+
+function copyEmailTemplate(templateId, button) {
+    const template = document.getElementById(templateId);
+    if (!template) return;
+    
+    const text = template.textContent;
+    navigator.clipboard.writeText(text).then(function() {
+        button.textContent = '✓ Copied!';
+        button.classList.add('copied');
+        
+        setTimeout(function() {
+            button.textContent = 'Copy Email';
+            button.classList.remove('copied');
+        }, 2000);
+    }).catch(function(err) {
+        console.error('Failed to copy: ', err);
+        button.textContent = 'Copy failed';
+    });
+}
