@@ -974,7 +974,7 @@ function copyToClipboard(elementId) {
 }
 
 // Email Templates Functions
-const emailTemplates = ['emailTemplate1', 'emailTemplate2', 'emailTemplate3', 'emailTemplate4', 'emailTemplate5', 'emailTemplate6', 'emailTemplate7', 'emailTemplate8', 'emailTemplate9', 'emailTemplate10'];
+const emailTemplates = ['emailTemplate1', 'emailTemplate1a', 'emailTemplate2', 'emailTemplate3', 'emailTemplate4', 'emailTemplate5', 'emailTemplate6', 'emailTemplate7', 'emailTemplate8', 'emailTemplate9', 'emailTemplate10'];
 const emailSignatures = ['Ngā mihi', 'Cheers', 'Thanks', 'Kind regards', 'Warm regards', 'Kia pai tō rā (Have a good day)', 'Kia pai tō rā whakatā (Have a good weekend)'];
 
 // Initialize email templates after DOM loads
@@ -1013,6 +1013,16 @@ function updateAllEmailTemplates() {
         'emailTemplate1': `Kia ora <span class="email-highlight">${name}</span>
 
 All sorted! I've actioned your request as per below.
+
+Let me know if you need anything else.
+
+<span class="email-signature" id="emailSignature1">${signature}</span>`,
+
+'emailTemplate1a': `Kia ora <span class="email-highlight">${name}</span>
+
+All sorted! I've actioned your request as per below.
+
+Please wait a few hours for the changes to take effect
 
 Let me know if you need anything else.
 
